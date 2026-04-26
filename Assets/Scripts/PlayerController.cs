@@ -3,13 +3,14 @@ using UnityEngine.InputSystem.Interactions;
 
 public class PlayerController : MonoBehaviour
 {
+    public bool gameOver;
     public float jumpForce = 10;
     public float gravityModifier;
     public bool isOnGround = true;
     private Rigidbody playerRb;
 
 
-  
+
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
@@ -27,6 +28,12 @@ public class PlayerController : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        isOnGround = true;
+        if (collision.gameObject.CompareTag("Ground")){
+            isOnGround = true;
+        }else if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log("Game Over!");
+            gameOver = true;
+        }
     }
 }
