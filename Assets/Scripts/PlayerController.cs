@@ -3,6 +3,9 @@ using UnityEngine.InputSystem.Interactions;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioClip jumpSound;
+    public AudioClip crashSound;
+    private AudioSource playerAudio;
     public ParticleSystem dirt;
     public ParticleSystem puff;
     private Rigidbody playerRb;
@@ -15,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        playerAudio = GetComponent<AudioSource>();
         playerAnim = GetComponent<Animator>();
         playerRb = GetComponent<Rigidbody>();
         Physics.gravity *= gravityModifier;
@@ -24,6 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver)
         {
+            playerAudio.PlayOneShot(jumpSound, 1.0f);
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
             playerAnim.SetTrigger("Jump_trig");
@@ -45,6 +50,7 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetInteger("DeathType_int", 1);
             puff.Play();
             dirt.Stop();
+            playerAudio.PlayOneShot(crashSound, 1.0f);
         }
     }
 }
